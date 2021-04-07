@@ -19,7 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/register', 'Api\AuthController@register');
+Route::apiResources([
+    'users' => Api\AuthController::class,
+    // 'posts' => PostController::class,
+]);
+
 Route::post('/login', 'Api\AuthController@login');
+Route::put('/change-password', 'Api\AuthController@changePassword');
 
 Route::apiResource('/ceo', 'Api\CEOController')->middleware('auth:api');
