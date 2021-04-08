@@ -42,7 +42,7 @@ class AuthRequest extends FormRequest
             'name.max:55' => 'El nombre debe tener un máximo de 55 caracteres.',
             'email.required' => 'El correo es requerido.',
             'email.email' => 'El correo no es correcto.',
-            'email.unique:users' => 'El correo, ya está siendo usado por otro usuario.',
+            'email.unique' => 'El correo, ya está siendo usado por otro usuario.',
             'password.required' => 'La contraseña es requerida.',
             'password.confirmed' => 'Las contraseñas deben ser iguales.',
         ];
