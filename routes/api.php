@@ -28,3 +28,9 @@ Route::post('/login', 'Api\AuthController@login');
 Route::put('/change-password', 'Api\AuthController@changePassword');
 
 Route::apiResource('/ceo', 'Api\CEOController')->middleware('auth:api');
+
+
+// Route::group(['middleware' => ['role:Distribuidor']], function () {
+    Route::apiResource('/products', 'Api\ProductController');
+    
+// });
