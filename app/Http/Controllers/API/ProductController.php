@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\Product;
 use App\Models\Plan;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ProductEditRequest;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -18,7 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return "hola";
+        return Product::with('plans')->where('status', '!=', 2)->orderBy('id', 'DESC')->get();
     }
 
     /**
@@ -31,12 +33,16 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
         $validated['img'] = Storage::put('products', $request->file('img'));
-
-        return $request;
         $product = Product::create($validated);
         
+        foreach(json_decode($request->plans) as $key => $value){
+                Plan::create([
+                    "price" => $value->price,
+                    "quantity" => $value->quantity,
+                    "product_id" => $product->id,
+                ]);
+        }
 
-            // Plan::create($validated);
         return response([ 'product' => $product, 'success' => "Producto Creado"]);
 
     }
@@ -59,9 +65,33 @@ class ProductController extends Controller
      * @param  \App\Models\Api\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductEditRequest $request, Product $product)
     {
-        //
+        try{
+            $validated = $request->validated();
+
+            if ($request->hasFile('img')) {
+                $chageImg = Product::where('id', $product->id)->first();
+                Storage::delete($chageImg->img);
+                $validated['img'] = Storage::put('products', $request->file('img'));
+            }
+                    
+            Product::where('id', $product->id)->update($validated);
+            $d = Plan::where('product_id', $product->id)->delete();
+
+            foreach(json_decode($request->plans) as $key => $value){
+                Plan::create([
+                    "price" => $value->price,
+                    "quantity" => $value->quantity,
+                    "product_id" => $product->id,
+                ]);
+            }
+            return response([ 'product' => $product, 'success' => "Producto Modificado"]);
+
+        }catch (\Exception $exception){
+            return Response($exception->getMessage(), 500, ['Content-Type' => 'text/plain']);
+        }
+        
     }
 
     /**
@@ -70,8 +100,19 @@ class ProductController extends Controller
      * @param  \App\Models\Api\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
+        try{
+            $product = Product::findOrFail($id);
+            Product::where('id', $id)->update(['status' => 2]);
+            
+            return response([ 'success' => "Producto Eliminado"]);
+        }
+        catch(Exception $e){
+            return Response($e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+
+        }
+        
         
     }
 }
