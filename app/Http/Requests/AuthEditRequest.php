@@ -23,10 +23,14 @@ class AuthEditRequest extends FormRequest
      */
     public function rules()
     {
-        // $users = DB::table('users')->where('id', '!=', $id)->get();
         return [
             'name' => 'required|max:55',
-            // 'email' => 'email|required|unique:users'
+            'phone' => 'numeric|nullable',
+            'email' => 'email',
+            'delivery_address' => 'nullable',
+            'city' => 'nullable',
+            'total_purchase' => 'nullable',
+            'total_sale' => 'nullable',
         ];
     }
 
@@ -41,7 +45,7 @@ class AuthEditRequest extends FormRequest
             'name.required' => 'El nombre es requerido.',
             'name.max:55' => 'El nombre debe tener un máximo de 55 caracteres.',
             // 'email.required' => 'El correo es requerido.',
-            // 'email.email' => 'El correo no es correcto.',
+            'email.email' => 'El correo no es correcto.',
             // 'email.unique:users' => 'El correo, ya está siendo usado por otro usuario.'
         ];
     }

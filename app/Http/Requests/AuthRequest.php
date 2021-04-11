@@ -25,8 +25,13 @@ class AuthRequest extends FormRequest
     {
         return [
             'name' => 'required|max:55',
+            'phone' => 'numeric|nullable',
             'email' => 'email|required|unique:users',
-            'password' => 'required|confirmed'
+            'delivery_address' => 'nullable',
+            'city' => 'nullable',
+            'total_purchase' => 'nullable',
+            'total_sale' => 'nullable',
+            'password' => 'required'//|confirmed
         ];
     }
 
@@ -44,7 +49,7 @@ class AuthRequest extends FormRequest
             'email.email' => 'El correo no es correcto.',
             'email.unique' => 'El correo, ya está siendo usado por otro usuario.',
             'password.required' => 'La contraseña es requerida.',
-            'password.confirmed' => 'Las contraseñas deben ser iguales.',
+            // 'password.confirmed' => 'Las contraseñas deben ser iguales.',
         ];
     }
 }

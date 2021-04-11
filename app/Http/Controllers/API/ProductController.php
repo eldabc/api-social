@@ -59,7 +59,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update product since admin role.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Api\Product  $product
@@ -93,6 +93,13 @@ class ProductController extends Controller
         }
         
     }
+
+    // public function updateDistribuitor(ProductEditRequest $request, Product $product)
+    // {
+    //     Product::where('id', $product->id)->update($validated);
+    //     return response([ 'product' => $product, 'success' => "Producto Modificado"]);
+
+    // }
 
     /**
      * Remove the specified resource from storage.

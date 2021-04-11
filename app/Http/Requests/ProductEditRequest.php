@@ -24,7 +24,7 @@ class ProductEditRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|max:55',
+            'name' => 'required|max:55',
             'presentation' => 'required|integer',
             'stock' => 'required|integer',
             'shipping_value' => 'nullable',
