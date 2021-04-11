@@ -17,8 +17,15 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->string('city');
             $table->string('delivery_address');
-
+            $table->string('name');
+            $table->string('phone');
+            $table->string('email');
+            $table->bigInteger('total_sale');
+            $table->bigInteger('status_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            
             $table->foreign('status_id')->references('id')->on('status_orders');
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
         });
