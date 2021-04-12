@@ -20,7 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::with('plans')->where('status', '!=', 2)->orderBy('id', 'DESC')->get();
+        return Product::with('plans')->where('status', '!=', 4)->orderBy('id', 'DESC')->get();
     }
 
     /**
@@ -111,7 +111,7 @@ class ProductController extends Controller
     {
         try{
             $product = Product::findOrFail($id);
-            Product::where('id', $id)->update(['status' => 2]);
+            Product::where('id', $id)->update(['status' => 4]);
             
             return response([ 'success' => "Producto Eliminado"]);
         }

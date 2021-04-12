@@ -32,5 +32,6 @@ Route::apiResource('/ceo', 'Api\CEOController')->middleware('auth:api');
 
 // Route::group(['middleware' => ['role:Distribuidor']], function () {
     Route::apiResource('/products', 'Api\ProductController');
+    Route::apiResource('/orders', 'Api\OrderController');
     
 // });

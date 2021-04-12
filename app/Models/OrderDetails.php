@@ -5,10 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CEO extends Model
+class OrderDetails extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'company_name', 'year', 'company_headquarters', 'what_company_does'
+        'price', 'quantity', 'plan_id', 'order_id', 
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
