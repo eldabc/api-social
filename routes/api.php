@@ -36,5 +36,8 @@ Route::put('/change-password', 'Api\AuthController@changePassword');
         // Admin routes
         Route::get('/list-distri-client', 'Api\AdminController@listDistriClient');
         Route::get('/detail-distri-client/{id}', 'Api\AdminController@detailDistriClient');
+        Route::get('/list-orders-by-role/{role_id}', 'Api\AdminController@listOrdersByRole');
+        Route::get('/change-status-order/{order_id}/{status_id}', 'Api\AdminController@changeStatusOrder');
+        Route::get('/change-status-product/{product_id}/{status_id}', 'Api\AdminController@changeStatusProduct');
     
     // });
