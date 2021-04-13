@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('email');
-            $table->bigInteger('total_sale');
+            $table->bigInteger('total_order');
             $table->bigInteger('status_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
             

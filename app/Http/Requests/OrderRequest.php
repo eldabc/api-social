@@ -29,7 +29,7 @@ class OrderRequest extends FormRequest
             'name' => 'required',
             'phone' => 'required',
             'email' => 'required',
-            'total_sale' => 'required',
+            'total_order' => 'required',
             'user_id' => 'required',
         ];
     }

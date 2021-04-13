@@ -18,12 +18,12 @@ class OrderDetails extends Migration
             $table->bigInteger('price');
             $table->integer('quantity');
             $table->bigInteger('plan_id')->unsigned();
+            $table->integer('distr_id')->nullable();
             $table->bigInteger('order_id')->unsigned();
+
             $table->foreign('plan_id')->references('id')->on('plans');
             $table->foreign('order_id')->references('id')->on('orders');
             $table->timestamps();
-            // $table->string('shipping_value')->nullable();
-            // $table->string('delivery_time')->nullable();
         });
     }
 

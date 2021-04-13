@@ -14,24 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 
 Route::apiResources([
     'users' => Api\AuthController::class,
-    // 'posts' => PostController::class,
 ]);
 
 Route::post('/login', 'Api\AuthController@login');
 Route::put('/change-password', 'Api\AuthController@changePassword');
 
-Route::apiResource('/ceo', 'Api\CEOController')->middleware('auth:api');
 
-
-// Route::group(['middleware' => ['role:Distribuidor']], function () {
     Route::apiResource('/products', 'Api\ProductController');
     Route::apiResource('/orders', 'Api\OrderController');
+
+    // Route::group(['middleware' => 'can:detail-distri-client'], function () {
+    // Route::group(['middleware' => ['role:Cliente']], function () {
     
-// });
+        // Admin routes
+        Route::get('/list-distri-client', 'Api\AdminController@listDistriClient');
+        Route::get('/detail-distri-client/{id}', 'Api\AdminController@detailDistriClient');
+    
+    // });

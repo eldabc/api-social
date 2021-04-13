@@ -15,20 +15,43 @@ class UserSeeder extends Seeder
     public function run()
     {
 
-      $user = User::create([
+      $admin = User::create([
           'name'  => 'Admin Repsex',
           'phone'      => '12345678',
           'email'      => 'repsex@info.com',
           'email_verified_at' => now(),
-          'delivery_address'  => 'Address Test',
+          'delivery_address'  => 'Address Test Admin',
           'city' => 'City Test',
-          'total_purchase' => '100',
-          'total_sale'     => '200',
+          'total_transactions' => '100',
           'password'       => bcrypt('12345678'),
           'remember_token' => null,
-      ]);
+      ])->assignRole(1);
 
-      $user->assignRole(1);
+    
+      $client = User::create([
+        'name'  => 'Client Repsex',
+        'phone'      => '12345678',
+        'email'      => 'c_repsex@info.com',
+        'email_verified_at' => now(),
+        'delivery_address'  => 'Address Test Client',
+        'city' => 'City Test',
+        'total_transactions' => '200',
+        'password'       => bcrypt('12345678'),
+        'remember_token' => null,
+    ])->assignRole(2);
+
+    $distribuitor = User::create([
+      'name'  => 'Distribuidor Repsex',
+      'phone'      => '12345678',
+      'email'      => 'd_repsex@info.com',
+      'email_verified_at' => now(),
+      'delivery_address'  => 'Address Test Distribuidor',
+      'city' => 'City Test',
+      'total_transactions' => '300',
+      'password'       => bcrypt('12345678'),
+      'remember_token' => null,
+  ])->assignRole(3);
+  
 
 
     }

@@ -35,16 +35,21 @@ class OrderController extends Controller
             DB::beginTransaction();
         
                 $validated = $request->validated();
-                $validated['status_id'] = 1; //1 = creado
+                $validated['status_id'] = 2; //2 = Pendiente
                 $order = Order::create($validated);
 
                 $items = [];
+                $distr_id = 0;
                 foreach(json_decode($request->items) as $key => $value){
+       
+                    if(!empty($value->distr_id)) $distr_id = $value->distr_id; //distributor id
+
                     $plan = Plan::findOrFail($value->plan_id);
                     $orderDetails =  OrderDetails::create([
                             "price" => $plan->price,
                             "quantity" => $plan->quantity,
                             "plan_id" => $plan->id,
+                            "distr_id" => $distr_id,
                             "order_id" => $order->id,
                     ]);
                     

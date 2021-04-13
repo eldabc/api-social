@@ -29,8 +29,7 @@ class AuthEditRequest extends FormRequest
             'email' => 'email',
             'delivery_address' => 'nullable',
             'city' => 'nullable',
-            'total_purchase' => 'nullable',
-            'total_sale' => 'nullable',
+            'total_transactions' => 'nullable',
         ];
     }
 
