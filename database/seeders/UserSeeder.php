@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -25,8 +26,7 @@ class UserSeeder extends Seeder
           'total_transactions' => '100',
           'password'       => bcrypt('12345678'),
           'remember_token' => null,
-      ])->assignRole(1);
-
+      ])->syncRoles(['Administrador']);
     
       $client = User::create([
         'name'  => 'Client Repsex',
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
         'total_transactions' => '200',
         'password'       => bcrypt('12345678'),
         'remember_token' => null,
-    ])->assignRole(2);
+    ])->assignRole('Cliente');
 
     $distribuitor = User::create([
       'name'  => 'Distribuidor Repsex',
@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
       'total_transactions' => '300',
       'password'       => bcrypt('12345678'),
       'remember_token' => null,
-  ])->assignRole(3);
+  ])->assignRole('Distribuidor');
   
 
 

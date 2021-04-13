@@ -13,32 +13,41 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+    Route::group(['middleware' => ['auth:api','role:Administrador']], function () {
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-Route::apiResources([
-    'users' => Api\AuthController::class,
-]);
-
-Route::post('/login', 'Api\AuthController@login');
-Route::put('/change-password', 'Api\AuthController@changePassword');
-
-
-    Route::apiResource('/products', 'Api\ProductController');
-    Route::put('/update-resale-data', 'Api\ProductController@updateResaleData');
-    Route::apiResource('/orders', 'Api\OrderController');
-
-    // Route::group(['middleware' => 'can:detail-distri-client'], function () {
-    // Route::group(['middleware' => ['role:Cliente']], function () {
-    
         // Admin routes
         Route::get('/list-distri-client', 'Api\AdminController@listDistriClient');
         Route::get('/detail-distri-client/{id}', 'Api\AdminController@detailDistriClient');
         Route::get('/list-orders-by-role/{role_id}', 'Api\AdminController@listOrdersByRole');
         Route::get('/change-status-order/{order_id}/{status_id}', 'Api\AdminController@changeStatusOrder');
         Route::get('/change-status-product/{product_id}/{status_id}', 'Api\AdminController@changeStatusProduct');
+
+    });
+
+
+    Route::group(['middleware' => ['role:Distribuidor']], function () {
     
-    // });
+        Route::apiResources([
+            'users' => Api\AuthController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['role:Cliente']], function () {
+    
+    });
+
+    Route::group(['middleware' => ['role:Administrador|Cliente|Distribuidor']], function () {
+        
+        Route::put('/change-password', 'Api\AuthController@changePassword');
+        
+    });
+    
+    
+
+    Route::post('/login', 'Api\AuthController@login');
+    Route::post('/productU', 'Api\OrderController@productU');
+
+
+    Route::apiResource('/products', 'Api\ProductController');
+    Route::put('/update-resale-data', 'Api\ProductController@updateResaleData');
+    Route::apiResource('/orders', 'Api\OrderController');

@@ -15,6 +15,8 @@ class User extends Authenticatable
     use HasFactory, HasApiTokens, Notifiable;
     use HasRoles;
 
+    protected $guard_name = 'api';
+    
     /**
      * The attributes that are mass assignable.
      *

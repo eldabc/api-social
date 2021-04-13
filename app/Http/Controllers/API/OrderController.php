@@ -24,6 +24,16 @@ class OrderController extends Controller
         return Order::with('order_details')->orderBy('id', 'DESC')->get();
     }
 
+    public function productU(){
+        $affec = DB::update(
+                        'update products set stock = 10000 where id = 1'
+                );
+        // $client = Product::findOrFail(1);
+        //                 $client->update([
+        //                     'stock' => 123
+        //                 ]); 
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -41,22 +51,30 @@ class OrderController extends Controller
 
                 $items = [];
                 $distr_id = 0;
+                $i = 0;
                 foreach(json_decode($request->items) as $key => $value){
        
+                    $plan = Plan::findOrFail($value->plan_id);
+
+
                     if(!empty($value->distr_id)){//sale client 
                         
                         $distr_id = $value->distr_id; //distributor id
 
                     } else {//sale distribuitor
+                       $product = Product::findOrFail($plan->product_id);
+                    //    return $value->quantity;
+                       $stock = $product->stock - $value->quantity;
 
-                        $plan = Plan::findOrFail($value->plan_id);
-                        // $affec = DB::update(
-                        //         'update products set stock = 10000 where id = ?',[1]
-                        // );
-                        return Product::all();
-                        return Product::where('id', $plan->product_id)->update([ 'stock' => 333 ]);
-                        // ->join('products', 'products.id', 'plans.product_id')
-                        //   $affec;//   $plan->product_id;
+                            if ($stock < 0){
+                                DB::rollBack();
+                                $product = Product::findOrFail($plan->product_id);
+                                return Response('Sin Stock suficiente para la compra de '.$product->name .' disponible: '.$product->stock, 500, ['Content-Type' => 'text/plain']);
+                            }
+
+                        DB::update(
+                            'update products set stock = ? where id = ?', [$stock, $plan->product_id]
+                        );
                     }
 
                     $orderDetails =  OrderDetails::create([
@@ -68,6 +86,8 @@ class OrderController extends Controller
                     ]);
 
                         array_push($items, $orderDetails);
+$i++;
+
                 }
                     $order['order_details'] = $items;
             

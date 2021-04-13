@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthResource;
 use App\Http\Requests\AuthEditRequest;
 use App\Http\Requests\ChangePasswordRequest;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -84,12 +85,18 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (!auth()->attempt($loginData))
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!Hash::check($request->password, $user->password)){
             return response(['message' => 'Invalid Credentials']);
+        }
+        
+        $accessToken = $user->createToken('authToken')->accessToken;
+        
+        $user->load('roles');
 
-        $accessToken = auth()->user()->createToken('authToken')->accessToken;
-
-        return response(['user' => auth()->user(), 'access_token' => $accessToken]);
+        return response(['user' => $user, 'access_token' => $accessToken]);
 
     }
 
