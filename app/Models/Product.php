@@ -17,4 +17,9 @@ class Product extends Model
     {
         return $this->hasMany(Plan::class);
     }
+
+    public function resaleData()
+    {
+        return $this->hasMany(ResaleData::class);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Plan;
 use App\Models\Product;
+use App\Models\ResaleData;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
@@ -94,12 +95,34 @@ class ProductController extends Controller
         
     }
 
-    // public function updateDistribuitor(ProductEditRequest $request, Product $product)
-    // {
-    //     Product::where('id', $product->id)->update($validated);
-    //     return response([ 'product' => $product, 'success' => "Producto Modificado"]);
+     /**
+     * Update or create resale data since user distribuitor.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateResaleData(Request $request)
+    {
+        try{
+            $product = ResaleData::updateOrCreate([
+                'product_id' => $request->product_id,
+                'user_id' => $request->user_id
+                ],
+                [
+                'inventory' =>  $request->inventory,
+                'shipping_value' => $request->shipping_value,
+                'delivery_time' => $request->delivery_time,
+                'status' => $request->status,
+                'unitary_price' => $request->unitary_price,
+                ]);
+            
+            return response([ 'product' => $product, 'success' => "Producto Modificado"]);
+            
 
-    // }
+        }catch (\Exception $exception){
+            return Response("Ha ocurrido un error.".$exception->getMessage(), 500, ['Content-Type' => 'text/plain']);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.

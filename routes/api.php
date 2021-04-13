@@ -28,6 +28,7 @@ Route::put('/change-password', 'Api\AuthController@changePassword');
 
 
     Route::apiResource('/products', 'Api\ProductController');
+    Route::put('/update-resale-data', 'Api\ProductController@updateResaleData');
     Route::apiResource('/orders', 'Api\OrderController');
 
     // Route::group(['middleware' => 'can:detail-distri-client'], function () {

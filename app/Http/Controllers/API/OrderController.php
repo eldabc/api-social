@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Plan;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\OrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,17 +43,30 @@ class OrderController extends Controller
                 $distr_id = 0;
                 foreach(json_decode($request->items) as $key => $value){
        
-                    if(!empty($value->distr_id)) $distr_id = $value->distr_id; //distributor id
+                    if(!empty($value->distr_id)){//sale client 
+                        
+                        $distr_id = $value->distr_id; //distributor id
 
-                    $plan = Plan::findOrFail($value->plan_id);
+                    } else {//sale distribuitor
+
+                        $plan = Plan::findOrFail($value->plan_id);
+                        // $affec = DB::update(
+                        //         'update products set stock = 10000 where id = ?',[1]
+                        // );
+                        return Product::all();
+                        return Product::where('id', $plan->product_id)->update([ 'stock' => 333 ]);
+                        // ->join('products', 'products.id', 'plans.product_id')
+                        //   $affec;//   $plan->product_id;
+                    }
+
                     $orderDetails =  OrderDetails::create([
-                            "price" => $plan->price,
-                            "quantity" => $plan->quantity,
-                            "plan_id" => $plan->id,
+                            "price" => $value->price,
+                            "quantity" => $value->quantity,
+                            "plan_id" => $value->plan_id,
                             "distr_id" => $distr_id,
                             "order_id" => $order->id,
                     ]);
-                    
+
                         array_push($items, $orderDetails);
                 }
                     $order['order_details'] = $items;
