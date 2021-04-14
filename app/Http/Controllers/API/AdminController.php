@@ -30,42 +30,16 @@ class AdminController extends Controller
     /**
      * Details distribuitors and clients.
      *
-     * @param user_id $id
+     * @param user_id $id paginate $paginate
      * @return \Illuminate\Http\Response
      */
-    function detailDistriClient($id)
+    function detailDistriClient($id, $paginate)
     {
-        $user = User::with('roles')->where('id', $id)->first();
-
-        if( $user->roles[0]->id === 2 )//user cliente
-        {
-            $query =  Order::join('order_details', 'order_details.order_id', 'orders.id')  
-                            ->join('users', 'users.id', 'order_details.distr_id')
-                            ->join('plans', 'order_details.plan_id', 'plans.id')   
-                            ->join('products', 'plans.product_id', 'products.id')   
-                            ->where('orders.user_id', $id)
-                            ->select(
-                                    'products.name as name_product', 'products.presentation',
-                                    'order_details.quantity', 'users.name as name_distr', 'orders.created_at as created_at_order','orders.delivery_address as delivery_address_order',
-                                    'orders.city as city_order','orders.total_order',
-                                    )
-                            ->get();
-
-        }else {
-            $query = Order::join('order_details', 'order_details.order_id', 'orders.id')  
-                            ->join('plans', 'order_details.plan_id', 'plans.id')   
-                            ->join('products', 'plans.product_id', 'products.id')   
-                            ->where('orders.user_id', $id)
-                            ->select(
-                                    'products.name as name_product', 'products.presentation',
-                                    'order_details.quantity', 'orders.created_at as created_at_order','orders.delivery_address as delivery_address_order',
-                                    'orders.city as city_order','orders.total_order',
-                                    )
-                            ->get();
-
-        }
-        $user['transactions'] = $query;
-        return  $user;
+        
+        $user = Order::with('order_details', 'order_details.distribuitor')->where('orders.user_id', $id)
+                     ->orderby('orders.id','DESC')->paginate($paginate);
+        
+        return  response([ 'user' => $user, 'roles' => User::find($id)->getRoleNames()]);
     }
 
     /**

@@ -16,4 +16,20 @@ class OrderDetails extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function distribuitor()
+    {
+        return $this->belongsTo(User::class, 'distr_id')->withDefault([
+            'id' => null,
+            'name' => null,
+            'phone' => null,
+            'email' => null,
+            'email_verified_at' => null,
+            'delivery_address' => null,
+            'city' => null,
+            'total_transactions' => null,
+            'created_at' => null,
+            'updated_at' => null,
+        ]);
+    }
 }
