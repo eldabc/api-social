@@ -109,7 +109,7 @@ class ProductController extends Controller
                 'user_id' => $request->user_id
                 ],
                 [
-                'inventory' =>  $request->inventory,
+                'stock' =>  $request->stock,
                 'shipping_value' => $request->shipping_value,
                 'delivery_time' => $request->delivery_time,
                 'status' => $request->status,

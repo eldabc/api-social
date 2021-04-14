@@ -17,8 +17,8 @@ class ProductSeeder extends Seeder
     {
         $product = Product::create([
             "name" => 'Product Test',
-            "presentation" => 60,
-            "stock" => 200,
+            "presentation" => 10,
+            "stock" => 100,
             "img" => 'product.png',
             "status" => 1,
             "shipping_value" => '',
@@ -31,10 +31,36 @@ class ProductSeeder extends Seeder
             "product_id" => $product->id,
         ]);
 
+        $product_1 = Product::create([
+            "name" => 'Product Test 1',
+            "presentation" => 20,
+            "stock" => 200,
+            "img" => 'product_1.png',
+            "status" => 1,
+            "shipping_value" => '',
+            "delivery_time" => '',
+        ]);
+
         Plan::create([
             "price" => 7000,
             "quantity" => 200,
-            "product_id" => $product->id,
+            "product_id" => $product_1->id,
+        ]);
+
+        $product_2 = Product::create([
+            "name" => 'Product Test 2',
+            "presentation" => 30,
+            "stock" => 300,
+            "img" => 'product_2.png',
+            "status" => 1,
+            "shipping_value" => '',
+            "delivery_time" => '',
+        ]);
+
+        Plan::create([
+            "price" => 8000,
+            "quantity" => 300,
+            "product_id" => $product_2->id,
         ]);
     }
 }

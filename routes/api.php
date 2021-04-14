@@ -45,8 +45,6 @@ use Illuminate\Support\Facades\Route;
     
 
     Route::post('/login', 'Api\AuthController@login');
-    Route::post('/productU', 'Api\OrderController@productU');
-
 
     Route::apiResource('/products', 'Api\ProductController');
     Route::put('/update-resale-data', 'Api\ProductController@updateResaleData');

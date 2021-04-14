@@ -15,7 +15,7 @@ class ResaleData extends Migration
     {
         Schema::create('resale_data', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('inventory');
+            $table->bigInteger('stock');
             $table->bigInteger('shipping_value');
             $table->bigInteger('delivery_time');
             $table->integer('status');

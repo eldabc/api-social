@@ -9,7 +9,7 @@ class ResaleData extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'inventory', 'shipping_value', 'delivery_time', 'status', 'unitary_price', 'product_id', 'user_id'
+        'stock', 'shipping_value', 'delivery_time', 'status', 'unitary_price', 'product_id', 'user_id'
     ];
 
     public function product()
