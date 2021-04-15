@@ -25,12 +25,12 @@ use Illuminate\Support\Facades\Route;
     });
 
 
-    Route::group(['middleware' => ['role:Distribuidor']], function () {
+    // Route::group(['middleware' => ['role:Distribuidor']], function () {
     
         Route::apiResources([
             'users' => Api\AuthController::class,
         ]);
-    });
+    // });
 
     Route::group(['middleware' => ['role:Cliente']], function () {
     
@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\Route;
     
 
     Route::post('/login', 'Api\AuthController@login');
+    Route::get('/payTest', 'Api\PayTestController@payTest');
 
     Route::apiResource('/products', 'Api\ProductController');
     Route::put('/update-resale-data', 'Api\ProductController@updateResaleData');

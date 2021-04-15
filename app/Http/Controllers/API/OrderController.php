@@ -5,16 +5,27 @@ namespace App\Http\Controllers\API;
 use App\Models\Plan;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\OrderDetails;
 use App\Models\ResaleData;
+use App\Models\OrderDetails;
 use Illuminate\Http\Request;
+use App\Services\EpaycoService;
+use App\Mail\CreatedOrderMailable;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
-class OrderController extends Controller
+class OrderController extends Controller//EpaycoService
 {
+    
+    private $pay_service;
+    public function __construct()
+    {
+        // $this->pay_service = new EpaycoService(); 
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,9 +46,10 @@ class OrderController extends Controller
     {
         try {
             DB::beginTransaction();
-        
                 $validated = $request->validated();
                 $validated['status_id'] = 2; //2 = Pendiente
+                // $token = $this->pay_service->createTokenCreditCard();
+
                 $order = Order::create($validated);
 
                 $items = [];
@@ -79,12 +91,22 @@ class OrderController extends Controller
                 }
                     $order['order_details'] = $items;
             
+                    $data = [
+                        'name' => $order->name, 
+                        'phone' => $order->phone, 
+                        'email' => $order->email, 
+                        'delivery_address' => $order->delivery_address, 
+                        'total_order' => $request->total_order, 
+                        'items' => $order['order_details'] 
+                    ];
+                Mail::to($order->email)->send(new CreatedOrderMailable($data));
+            
             DB::commit();
             return response([ 'order' => $order, 'success' => "Pedido Creado"]);
         
         } catch (\Exception $e) {
             DB::rollBack();
-            return Response('Ha ocurrido un problema'.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
         }
     }
 
