@@ -32,16 +32,23 @@ class AuthController extends Controller
      */
     public function store(AuthRequest $request)
     {
-        $validated = $request->validated();
+        try {
+            DB::beginTransaction();
+            $validated = $request->validated();
 
-        $validated['password'] = bcrypt($request->password);
+            $validated['password'] = bcrypt($request->password);
 
+            $user = User::create($validated)->assignRole($request->role_id);
 
-        $user = User::create($validated);
-        $user->assignRole($request->role_id);
-        $accessToken = $user->createToken('authToken')->accessToken;
+            $accessToken = $user->createToken('authToken')->accessToken;
+            
+            send_mail_user($user);
+            return response([ 'user' => $user, 'access_token' => $accessToken]);
 
-        return response([ 'user' => $user, 'access_token' => $accessToken]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+        }
     }
 
 

@@ -30,6 +30,6 @@ class CreatedOrderMailable extends Mailable
      */
     public function build()
     {
-        return $this->subject('Pedido Generado con Éxito.')->view('emails.created_order_mail')->with($this->data);
+        return $this->subject('Pedido Generado con Éxito.')->view('emails.created_order_mail');
     }
 }

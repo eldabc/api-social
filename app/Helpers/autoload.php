@@ -3,6 +3,7 @@
 use App\Models\Plan;
 use App\Models\Product;
 use App\Models\ResaleData;
+use App\Mail\CreatedUserMailable;
 use App\Mail\CreatedOrderMailable;
 use Illuminate\Support\Facades\Mail;
 
@@ -46,7 +47,7 @@ use Illuminate\Support\Facades\Mail;
 
 
   /**
-   * Main in create.
+   * Mail in create order.
    *
    * @param order $order
    * @return array
@@ -57,10 +58,31 @@ use Illuminate\Support\Facades\Mail;
         'name' => $order->name, 
         'phone' => $order->phone, 
         'email' => $order->email, 
+        'city' => $order->city, 
         'delivery_address' => $order->delivery_address, 
         'total_order' => $order->total_order, 
         'items' => $order['order_details'] 
       ];
     
     Mail::to($order->email)->send(new CreatedOrderMailable($data));
+  }
+
+  /**
+   * Maij in create user.
+   *
+   * @param order $order
+   * @return array
+   */ 
+  function send_mail_user($user)
+  {
+      $data = [
+        'name' => $user->name, 
+        'phone' => $user->phone, 
+        'email' => $user->email, 
+        'delivery_address' => $user->delivery_address, 
+        'total_user' => $user->total_user, 
+        'items' => $user['order_details'] 
+      ];
+    
+    Mail::to($user->email)->send(new CreatedUserMailable($user));
   }

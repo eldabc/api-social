@@ -8,7 +8,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,900&display=swap" rel="stylesheet"> 
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
 
-	<title>Compra éxitosa</title>
+	<title>Registro éxitoso</title>
 
 
 	<style type="text/css" media="screen">
@@ -73,108 +73,35 @@
 												<tr>
 													<td class="p30-15" style="padding: 40px 0px 40px 0px; background-color: #ffffff;">
 														<table width="100%" border="0" cellspacing="0" cellpadding="0">
+															
 															<tr>
-																<td style="color:#272727; font-family: 'Roboto', sans-serif; font-size:30px; line-height:32px; text-align:center; padding-bottom:40px;">
-																	<div mc:edit="text_2">¡Compra realizada con éxito!</div>
+																<td style="color:#272727; font-family: 'Roboto', sans-serif; font-size:30px; line-height:32px; text-align:center; padding-bottom:15px;">
+																	<div mc:edit="text_2">Gracias por Registrarte en {{ env('APP_NAME') }}!</div>
+																</td>
+															</tr>
+															<tr>
+																<td class="text pb15" style="color:#666666; font-family:Open Sans, sans-serif; font-size:16px; line-height:28px; text-align:center; padding: 30px 30px 0px 30px;">
+																	<div mc:edit="text_3">Toda la información que usted diligenció fue registrada con éxito. <br>
+																</td>
+															</tr>
+															<tr>
+																<td class="text pb15" style="color:#666666; font-family:Open Sans, sans-serif; font-size:15px; line-height:28px; text-align:left; padding: 0px 30px 0px 30px;">
+																	<div mc:edit="text_3">
+																		<ul>
+																			<li><b>Nombres:</b> {{ $data->name }}</li>
+																			<li><b>Teléfono:</b> {{ $data->phone }}</li>
+																			<li><b>Email:</b> {{ $data->email }}</li>
+																		</ul>
+																	</div>
 																</td>
 															</tr>
 															<tr>
 																<td style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding-bottom:40px;">
 																	<div mc:edit="text_2">
-																			<h1>Estimado {{ $data['name'] }}</h1>
-																		<p>Hemos registrado exitosamen se compra.</p>
+																		<p>Le invitamos a realizar su primera compra <a href="#">Aquí</a>. </p>
 																	</div>
 																</td>
 															</tr>
-															<tr>
-																<td align="left" style="padding-left: 30px;">
-																<h3 style="font-family: 'Roboto', sans-serif; font-size:15px; line-height:40px; text-align:center;">Detalles de Compra</h3>
-																<table border="0" cellspacing="0" cellpadding="1s">
-																		<tr>
-																			<td class="img" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 3px 80px;">
-																				Email
-																			</td>
-																			<td class="img" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 3px 80px;">
-																				Teléfono
-																			</td>
-																			<td class="img" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 3px 80px;">
-																				Ciudad 
-																			</td>
-																			<td class="img" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 3px 80px;">
-																				Dirección
-																			</td>
-																		</tr>
-																		<tr>
-																			<td class="img" width="100" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 1px 40px;">
-																				{{ $data['email'] }}
-																			</td>
-																			<td class="img" width="100" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 1px 40px;">
-																				{{ $data['phone'] }}
-																			</td>
-																			<td class="img" width="auto" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 1px 40px;">
-																				{{ $data['city'] }}
-																			</td>
-
-																			<td class="img" width="auto" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 1px 40px;">
-																				{{ $data['delivery_address'] }}
-																			</td>
-																		</tr>
-																	</table>
-																	<table border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
-																		<tr>
-																			<td class="img" width="55" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:42px; text-align:center; padding: 20px 80px;">
-																				Producto
-																			</td>
-																			<td class="img" width="55" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:42px; text-align:center; padding: 20px 80px;">
-																				Cantidad
-																			</td>
-																			<td class="img" width="55" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:42px; text-align:center; padding: 20px 80px;">
-																				Monto
-																			</td>
-																		</tr>
-																		@foreach($data['items'] as $value)
-																		<tr>
-																			<td class="img" width="100" style="font-size:0pt; line-height:0pt; text-align:center;">
-																				<a href="#" target="_blank"><img src="https://lh3.googleusercontent.com/-9jt9iyO-GTs/YHd0xuu_XqI/AAAAAAAAkoc/OW-Zpl3H4lsgbjbLQtMe7NKJyhKS2xH2ACK8BGAsYHg/s0/2021-04-14.png?authuser=0" width="50px" height="50px" mc:edit="image_7" style="max-width:50px;" border="0" alt="" /></a>
-																			</td>
-																			<td class="img" width="auto" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 40px 40px;">
-																				{{$value['quantity']}}
-																			</td>
-
-																			<td class="img" width="auto" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 40px 40px;">
-																				{{$value['price']}}
-																			</td>
-																		</tr>
-																		@endforeach
-																		<tr>
-																			<td class="img" width="auto" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 40px 40px;"></td>
-																			<td class="img" width="auto" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:right; font-weight: bold; padding-left: 40px;">
-																				Total:
-																			</td>
-																			<td class="img" width="auto" style="color:#272727; font-family: 'open sans', sans-serif; font-size:15px; line-height:32px; text-align:center; padding: 40px 40px;">
-																				{{$data['total_order']}}
-																			</td>
-																		</tr>
-																		<tr>
-																			<td style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding-bottom:40px;">
-																				<div mc:edit="text_2">
-																					<p>Recuerde que sus productos no serán publicados hasta que fije sus <a href="#">Datos de Reventa Aquí</a>. </p>
-																				</div>
-																			</td>
-																		</tr>
-																	</table>
-																</td>
-															</tr>
-															<tr>
-																<td height="1" bgcolor="#e5e5e5" class="img" style="font-size:0pt; line-height:0pt; text-align:left;">&nbsp;</td>
-															</tr>
-															<tr>
-																<td align="left" style="padding-left: 30px; padding-top: 20px;">
-																	
-																</td>
-															</tr>
-															
-
 														</table>
 													</td>
 												</tr>
@@ -191,7 +118,7 @@
 														<table width="100%" border="0" cellspacing="0" cellpadding="0">
 															<tr>
 																<td class="text-footer2 pb20" style="color:#777777; font-family:Open Sans, sans-serif; font-size:12px; line-height:26px; text-align:center; padding-bottom:0px;">
-																	<div mc:edit="text_30">Repcex |Colombia</div>
+																	<div mc:edit="text_30">Repcex | Colombia</div>
 																</td>
 															</tr>
 															<tr>
