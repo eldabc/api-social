@@ -32,11 +32,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getTotalOrderAttribute()
-    {
+    // public function getTotalOrderAttribute()
+    // {
     //    return $this->order_details()->reduce(function ($price, $item) {
     //        return $price + ($item->quantity * $item->price);
     //    }, 0);
-    }
+    // }
 
 }

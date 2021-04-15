@@ -1,9 +1,10 @@
 <?php 
 namespace App\Services;
 
-use Epayco\Epayco;
+use \Epayco\Epayco;
+use Illuminate\Support\Env;
 
-  class EpaycoService
+class EpaycoService
   {
     protected $conection;
 
@@ -25,32 +26,10 @@ use Epayco\Epayco;
      */
     public function createTokenCreditCard($cc_t = [])
     {
-      try{
 
-         $r = $this->conection->token->create($cc_t);
-        //  return json_encode($r->data->description); 
-        return $this->catchException($r);
-
-      } catch (\Exception $e) {
-        return Response('Ha ocurrido un problema '.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
-      }
+        return $this->conection->token->create($cc_t);
       
     }
-
-    /**
-     * Create token card.
-     *
-     * @param cc_t $cc_t
-     * @return stdClass Object token card id
-     */
-    public function catchException($r)
-    {
-      if ( json_encode($r->status) === 'false')
-        return json_encode($r->data->description).' '.json_encode($r->data->errors);
-        else return $r;
-
-    }
-
 
     /**
      * Create customer.
@@ -60,7 +39,6 @@ use Epayco\Epayco;
      */
     public function makeCustomer($client = [])
     {
-      return $client;
       $client = collect($client);
       $cc_t = $client->only('card[number]', 'card[exp_year]', 'card[exp_month]', 'card[cvc]');
       $token_card = $this->createTokenCreditCard($cc_t->toArray());

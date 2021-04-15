@@ -14,15 +14,16 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use ErrorException;
 use Illuminate\Support\Facades\Mail;
 
-class OrderController extends Controller//EpaycoService
+class OrderController extends EpaycoService //Controller
 {
     
     private $pay_service;
     public function __construct()
     {
-        // $this->pay_service = new EpaycoService(); 
+        $this->pay_service = new EpaycoService(); 
 
     }
 
@@ -48,58 +49,39 @@ class OrderController extends Controller//EpaycoService
             DB::beginTransaction();
                 $validated = $request->validated();
                 $validated['status_id'] = 2; //2 = Pendiente
-                // $token = $this->pay_service->createTokenCreditCard();
 
+                    $pay = $this->pay_service->createPayment();
+                    if ($e = isException($pay))
+                        return $e;
+                
                 $order = Order::create($validated);
 
                 $items = [];
-                $distr_id = 0;
                 foreach(json_decode($request->items) as $key => $value){
 
-                    $plan = Plan::findOrFail($value->plan_id);
-                        if(!empty($value->distr_id)){//sale client 
-
-                            $product = ResaleData::findOrFail($plan->product_id);
-                            $distr_id = $value->distr_id; //distributor id
-                            $table = 'resale_data';
-
-                        } else { //sale distribuitor
-
-                            $product = Product::findOrFail($plan->product_id);
-                            $table = 'products';
+                    $res = stock($value);
+                        if ($res['stock'] < 0){
+                            DB::rollBack();
+                            return Response('Sin Stock suficiente para la compra '.$res['product']->name .' disponible: '.$res['product']->stock, 500, ['Content-Type' => 'text/plain']);
                         }
-                            $stock = $product->stock - $value->quantity;
-
-                            if ($stock < 0){
-                                DB::rollBack();
-                                return Response('Sin Stock suficiente para la compra de '.$product->name .' disponible: '.$product->stock, 500, ['Content-Type' => 'text/plain']);
-                            }
 
                     DB::update(
-                        'update '.$table.' set stock = ? where id = ?', [$stock, $plan->product_id]
+                        'update '.$res['table'].' set stock = ? where id = ?', [$res['stock'], $res['plan']->product_id]
                     );
 
                     $orderDetails =  OrderDetails::create([
                             "price" => $value->price,
                             "quantity" => $value->quantity,
                             "plan_id" => $value->plan_id,
-                            "distr_id" => $distr_id,
+                            "distr_id" => $res['distr_id'],
                             "order_id" => $order->id,
                     ]);
 
-                        array_push($items, $orderDetails);
+                    array_push($items, $orderDetails);
                 }
                     $order['order_details'] = $items;
-            
-                    $data = [
-                        'name' => $order->name, 
-                        'phone' => $order->phone, 
-                        'email' => $order->email, 
-                        'delivery_address' => $order->delivery_address, 
-                        'total_order' => $request->total_order, 
-                        'items' => $order['order_details'] 
-                    ];
-                Mail::to($order->email)->send(new CreatedOrderMailable($data));
+
+            send_mail_order($order);
             
             DB::commit();
             return response([ 'order' => $order, 'success' => "Pedido Creado"]);
