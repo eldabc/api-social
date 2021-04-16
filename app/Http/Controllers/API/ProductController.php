@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
 use App\Models\Plan;
 use App\Models\Product;
 use App\Models\ResaleData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProductEditRequest;
-use Exception;
 
 class ProductController extends Controller
 {
@@ -63,33 +64,42 @@ class ProductController extends Controller
      * Update product since admin role.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Api\Product  $product
+     * @param  id $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductEditRequest $request, Product $product)
+    public function update(ProductEditRequest $request, $id)
     {
         try{
+            DB::beginTransaction();
             $validated = $request->validated();
 
             if ($request->hasFile('img')) {
-                $chageImg = Product::where('id', $product->id)->first();
+                $chageImg = Product::findOrFail($id);
                 Storage::delete($chageImg->img);
                 $validated['img'] = Storage::put('products', $request->file('img'));
             }
-                    
-            Product::where('id', $product->id)->update($validated);
-            $d = Plan::where('product_id', $product->id)->delete();
 
+            $product = Product::where('id', $id)->update($validated);
             foreach(json_decode($request->plans) as $key => $value){
-                Plan::create([
-                    "price" => $value->price,
-                    "quantity" => $value->quantity,
-                    "product_id" => $product->id,
-                ]);
+                if(!empty($value->id))
+                {
+                    Plan::where('id', $value->id)->update([
+                        "price" => $value->price,
+                        "quantity" => $value->quantity
+                    ]);
+                }else{
+                    Plan::create([
+                        "price" => $value->price,
+                        "quantity" => $value->quantity,
+                        "product_id" => $id
+                    ]);
+                }
             }
+            DB::commit();
             return response([ 'product' => $product, 'success' => "Producto Modificado"]);
 
         }catch (\Exception $exception){
+            DB::rollBack();
             return Response($exception->getMessage(), 500, ['Content-Type' => 'text/plain']);
         }
         
@@ -130,12 +140,28 @@ class ProductController extends Controller
      * @param  \App\Models\Api\Product  $product
      * @return \Illuminate\Http\Response
      */
+    public function deleteProductResale($id)
+    {
+        try{
+            ResaleData::where('id', $id)->update(['status' => 4]);
+            return response([ 'success' => "Producto Eliminado"]);
+        }
+        catch(Exception $e){
+            return Response($e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Api\Product  $product
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         try{
-            $product = Product::findOrFail($id);
             Product::where('id', $id)->update(['status' => 4]);
-            
             return response([ 'success' => "Producto Eliminado"]);
         }
         catch(Exception $e){
