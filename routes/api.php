@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/change-status-order/{order_id}/{status_id}', 'Api\AdminController@changeStatusOrder');
         Route::get('/change-status-product/{product_id}/{status_id}', 'Api\AdminController@changeStatusProduct');
         // Products
-        Route::post('/products', 'Api\ProductController@store');
+        Route::post('/products',     'Api\ProductController@store');
         Route::put('/products/{id}', 'Api\ProductController@update');
         // User
         Route::get('/users', 'Api\AuthController@index');
@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::group(['middleware' => ['role:Cliente|Distribuidor']], function () {
         Route::post('/orders', 'Api\OrderController@store');
+        Route::put('/update-create-score',  'Api\ScoreController@updateCreateScore');
     });
 
     Route::group(['middleware' => ['role:Administrador|Cliente|Distribuidor']], function () {

@@ -32,6 +32,14 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the score associated with the user.
+     */
+    public function score()
+    {
+        return $this->hasOne(Score::class);
+    }
+
     // public function getTotalOrderAttribute()
     // {
     //    return $this->order_details()->reduce(function ($price, $item) {
