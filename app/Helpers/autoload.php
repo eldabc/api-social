@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\ResaleData;
 use App\Mail\CreatedUserMailable;
 use App\Mail\CreatedOrderMailable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
   /**
@@ -45,6 +46,18 @@ use Illuminate\Support\Facades\Mail;
     return [ 'plan' => $plan,  'distr_id' =>  $distr_id, 'product' => $product, 'table' => $table, 'stock' => $product->stock - $value->quantity ];
   }
 
+  /**
+   * Update stock in data base.
+   *
+   * @param $table, $stock, $product_id
+   * @return array
+   */
+  function updateStock($table, $stock, $product_id)
+  {
+    DB::update(
+      'update '.$table.' set stock = ? where id = ?', [$stock, $product_id]
+    );
+  }
 
   /**
    * Mail in create order.

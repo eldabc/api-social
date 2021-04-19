@@ -11,8 +11,8 @@ class EpaycoService
     public function __construct()
     {
       $this->conection = new Epayco([
-                                      "apiKey" => env('API_KEY'),
-                                      "privateKey" => env('PRIVATE_KEY'),
+                                      "apiKey" => "0dca45439d7388940c342dc32400a097",//env('API_KEY'),
+                                      "privateKey" => "ad97369de2d64b7dac878ef464ad389b",//env('PRIVATE_KEY'),
                                       "lenguage" => "ES",
                                       "test" => true
                                     ]);  

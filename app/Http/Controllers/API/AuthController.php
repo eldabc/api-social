@@ -33,8 +33,8 @@ class AuthController extends Controller
      */
     public function store(AuthRequest $request)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $validated = $request->validated();
 
             $validated['password'] = bcrypt($request->password);
@@ -44,6 +44,7 @@ class AuthController extends Controller
             $accessToken = $user->createToken('authToken')->accessToken;
             
             send_mail_user($user);
+            DB::commit();
             return response([ 'user' => $user, 'access_token' => $accessToken]);
 
         } catch (\Exception $e) {

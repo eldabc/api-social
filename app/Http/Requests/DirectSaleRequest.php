@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderRequest extends FormRequest
+class DirectSaleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,24 @@ class OrderRequest extends FormRequest
     {
         return [
             'city' => 'required',
-            'delivery_address' => 'required',
-            'name' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
+            'name' => 'required|max:55',
             'total_order' => 'required',
-            'user_id' => 'required',
             'items' => 'required|json'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'city.required' => 'La ciudad es requerida.',
+            'name.required' => 'El nombre es requerido.',
+            'total_order.required' => 'El total de la orden, es requerido.',
+            'items.required' => 'Seleccione productos para añadir a la venta.',
         ];
     }
 }

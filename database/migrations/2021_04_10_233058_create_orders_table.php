@@ -16,13 +16,13 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('city');
-            $table->string('delivery_address');
+            $table->string('delivery_address')->default('Venta Directa');
             $table->string('name');
-            $table->string('phone');
-            $table->string('email');
+            $table->string('phone')->default(12345678);
+            $table->string('email')->default('venta-directas@repsex.com');
             $table->bigInteger('total_order');
-            $table->bigInteger('status_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('status_id')->unsigned()->default(2); // 2 = Pendiente
+            $table->bigInteger('user_id')->unsigned()->default(4); // 4 = direct_sale
             
             $table->foreign('status_id')->references('id')->on('status_orders');
             $table->foreign('user_id')->references('id')->on('users');

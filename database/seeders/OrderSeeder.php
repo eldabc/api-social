@@ -15,10 +15,10 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        $order_cliente = Order::create([
-            'city'  => 'City Test Distri',
-            'delivery_address'  => 'Delibery Address Distri',
-            'name'  => 'Nombre Distri',
+        $order_distri = Order::create([
+            'city'  => 'City Test Distribuidor',
+            'delivery_address'  => 'Delibery Address Distribuidor',
+            'name'  => 'Nombre Distribuidor',
             'phone'  => '55555555',
             'email'  => 'c_repsex@info.com',
             'total_order'  => 100,
@@ -31,17 +31,17 @@ class OrderSeeder extends Seeder
                 'quantity'  => 100,
                 'plan_id'  => 1,
                 'distr_id'  => null,
-                'order_id'  => $order_cliente->id,
+                'order_id'  => $order_distri->id,
             ]);
             OrderDetails::create([
                 'price'  => 2000,
                 'quantity'  => 200,
                 'plan_id'  => 2,
                 'distr_id'  => null,
-                'order_id'  => $order_cliente->id,
+                'order_id'  => $order_distri->id,
             ]);
 
-        $order_distri = Order::create([
+        $order_client = Order::create([
             'city'  => 'City Test Cliente',
             'delivery_address'  => 'Delibery Address Cliente',
             'name'  => 'Nombre Cliente',
@@ -58,14 +58,14 @@ class OrderSeeder extends Seeder
                 'quantity'  => 300,
                 'plan_id'  => 1,
                 'distr_id'  => 2,
-                'order_id'  => $order_distri->id,
+                'order_id'  => $order_client->id,
             ]);
             OrderDetails::create([
                 'price'  => 2000,
                 'quantity'  => 200,
                 'plan_id'  => 2,
                 'distr_id'  => 2,
-                'order_id'  => $order_distri->id,
+                'order_id'  => $order_client->id,
             ]);
     }
 }

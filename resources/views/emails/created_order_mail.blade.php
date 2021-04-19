@@ -156,7 +156,7 @@
 																			</td>
 																		</tr>
 																		<tr>
-																			<td style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding-bottom:40px;">
+																			<td colspan="3" style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding-bottom:40px; margin: 0 auto;">
 																				<div mc:edit="text_2">
 																					<p>Recuerde que sus productos no serán publicados hasta que fije sus <a href="#">Datos de Reventa Aquí</a>. </p>
 																				</div>

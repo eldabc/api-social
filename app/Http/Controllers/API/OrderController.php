@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use ErrorException;
 use App\Models\Plan;
 use App\Models\Order;
 use App\Models\Product;
@@ -14,16 +15,16 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use ErrorException;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\DirectSaleRequest;
 
-class OrderController extends Controller//EpaycoService //
+class OrderController extends EpaycoService //Controller//
 {
     
     private $pay_service;
     public function __construct()
     {
-        // $this->pay_service = new EpaycoService(); 
+        $this->pay_service = new EpaycoService(); 
 
     }
 
@@ -39,21 +40,20 @@ class OrderController extends Controller//EpaycoService //
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new orders. (view: orders distribuitor, client)
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(OrderRequest $request)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
                 $validated = $request->validated();
-                $validated['status_id'] = 2; //2 = Pendiente
 
                     $pay = $this->pay_service->createPayment();
-                    if ($e = isException($pay))
-                        return $e;
+                    
+                    if ($e = isException($pay)) return $e;
                 
                 $order = Order::create($validated);
 
@@ -66,10 +66,55 @@ class OrderController extends Controller//EpaycoService //
                             return Response('Sin Stock suficiente para la compra '.$res['product']->name .' disponible: '.$res['product']->stock, 500, ['Content-Type' => 'text/plain']);
                         }
 
-                    DB::update(
-                        'update '.$res['table'].' set stock = ? where id = ?', [$res['stock'], $res['plan']->product_id]
-                    );
+                    updateStock($res['table'],$res['stock'], $res['plan']->product_id);
+                    $orderDetails =  OrderDetails::create([
+                            "price" => $value->price,
+                            "quantity" => $value->quantity,
+                            "plan_id" => $value->plan_id,
+                            "distr_id" => $res['distr_id'],
+                            "order_id" => $order->id
+                    ]);
 
+                    array_push($items, $orderDetails);
+                }
+                    $order['order_details'] = $items;
+
+            send_mail_order($order);
+            
+            DB::commit();
+            return response([ 'order' => $order, 'success' => "Pedido Creado"]);
+        
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+        }
+    }
+
+    /**
+     * Store a new direct sale. (view: direct sale)
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeDirectSale(DirectSaleRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+                $validated = $request->validated();
+                $validated['status_id'] = 1; //1 = Entregado
+
+                $order = Order::create($validated);
+
+                $items = [];
+                foreach(json_decode($request->items) as $key => $value){
+
+                    $res = stock($value);
+                        if ($res['stock'] < 0){
+                            DB::rollBack();
+                            return Response('Sin Stock suficiente para la compra '.$res['product']->name .' disponible: '.$res['product']->stock, 500, ['Content-Type' => 'text/plain']);
+                        }
+
+                    updateStock($res['table'],$res['stock'], $res['plan']->product_id);
                     $orderDetails =  OrderDetails::create([
                             "price" => $value->price,
                             "quantity" => $value->quantity,
@@ -81,11 +126,9 @@ class OrderController extends Controller//EpaycoService //
                     array_push($items, $orderDetails);
                 }
                     $order['order_details'] = $items;
-
-            send_mail_order($order);
             
             DB::commit();
-            return response([ 'order' => $order, 'success' => "Pedido Creado"]);
+            return response([ 'order' => $order, 'success' => "Venta Directa Registrada"]);
         
         } catch (\Exception $e) {
             DB::rollBack();

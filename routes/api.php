@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::group(['middleware' => ['role:Cliente|Distribuidor']], function () {
         Route::post('/orders', 'Api\OrderController@store');
+        Route::post('/direct-sale', 'Api\OrderController@storeDirectSale');
         Route::put('/update-create-score',  'Api\ScoreController@updateCreateScore');
     });
 
