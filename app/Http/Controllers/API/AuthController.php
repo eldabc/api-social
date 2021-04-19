@@ -21,9 +21,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($paginate = 8)
     {
-        return User::with('roles')->orderBy('id', 'DESC')->get();
+        return User::with('roles')->orderBy('id', 'DESC')->paginate($paginate);
     }
 
     /**
@@ -76,9 +76,9 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('img')) {
-                $chage_img = User::findOrFail($id);
-                Storage::delete($chage_img->img);
-                $validated['img'] = Storage::put('users', $request->file('img'));
+            $chage_img = User::findOrFail($id);
+            Storage::delete($chage_img->img);
+            $validated['img'] = Storage::put('users', $request->file('img'));
         }
         User::where('id', $id)->update($validated);
         

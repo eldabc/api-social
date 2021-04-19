@@ -27,6 +27,7 @@ class ProductEditRequest extends FormRequest
             'name' => 'required|max:55',
             'presentation' => 'required|integer',
             'stock' => 'required|integer',
+            'img' => 'nullable|image',
             'shipping_value' => 'nullable',
             'delivery_time' => 'nullable',
         ];

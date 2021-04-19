@@ -25,6 +25,7 @@ class AuthEditRequest extends FormRequest
     {
         return [
             'name' => 'required|max:55',
+            'img' => 'nullable|image',
             'phone' => 'numeric|nullable',
             'email' => 'email',
             'delivery_address' => 'nullable',
