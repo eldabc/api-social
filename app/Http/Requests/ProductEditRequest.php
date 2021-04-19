@@ -28,8 +28,6 @@ class ProductEditRequest extends FormRequest
             'presentation' => 'required|integer',
             'stock' => 'required|integer',
             'img' => 'nullable|image',
-            'shipping_value' => 'nullable',
-            'delivery_time' => 'nullable',
         ];
     }
 

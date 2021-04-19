@@ -10,7 +10,7 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'presentation', 'stock', 'img', 'status', 'shipping_value', 'delivery_time'
+        'name', 'presentation', 'stock', 'img', 'status'
     ];
 
     public function plans()

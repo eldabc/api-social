@@ -29,8 +29,6 @@ class ProductRequest extends FormRequest
             'stock' => 'required|integer',
             'img' => 'required|image',
             'status' => 'required|integer',
-            'shipping_value' => 'nullable',
-            'delivery_time' => 'nullable',
         ];
     }
 

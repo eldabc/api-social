@@ -21,8 +21,6 @@ class ProductSeeder extends Seeder
             "stock" => 100,
             "img" => 'product.png',
             "status" => 1,
-            "shipping_value" => '',
-            "delivery_time" => '',
         ]);
         
         Plan::create([
@@ -37,8 +35,6 @@ class ProductSeeder extends Seeder
             "stock" => 200,
             "img" => 'product_1.png',
             "status" => 1,
-            "shipping_value" => '',
-            "delivery_time" => '',
         ]);
 
         Plan::create([
@@ -53,8 +49,6 @@ class ProductSeeder extends Seeder
             "stock" => 300,
             "img" => 'product_2.png',
             "status" => 1,
-            "shipping_value" => '',
-            "delivery_time" => '',
         ]);
 
         Plan::create([

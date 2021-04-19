@@ -20,8 +20,6 @@ class CreateProductsTable extends Migration
             $table->integer('stock');
             $table->string('img');
             $table->integer('status'); // 1 = creado 2 = habilitado 3 = deshabilitado 4 = eliminado
-            $table->string('shipping_value')->nullable();
-            $table->string('delivery_time')->nullable();
             $table->timestamps();
         });
     }
