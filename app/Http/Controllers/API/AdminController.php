@@ -14,17 +14,15 @@ use App\Http\Controllers\Controller;
 class AdminController extends Controller
 {
      /**
-     * General list of distribuitors and clients.
+     * General list of distribuitors and clients. (View general list)
      *
-     * @param  
+     * @param  paginate $paginate
      * @return \Illuminate\Http\Response
      */
-    function listDistriClient()
+    function listDistriClient($paginate)
     {
-        return  User::join('model_has_roles', 'model_has_roles.model_id', 'users.id')
-                    ->join('roles', 'roles.id', 'model_has_roles.role_id')
-                    ->where('model_has_roles.role_id', '!=', 1)// 1 = admin user
-                    ->select('users.*','roles.name as role_name')->get();
+        return  User::role([2,3])->with(['scores'])
+                        ->paginate($paginate);
     }
 
     /**
@@ -33,22 +31,22 @@ class AdminController extends Controller
      * @param user_id $id paginate $paginate
      * @return \Illuminate\Http\Response
      */
-    function detailDistriClient($id, $paginate)
+    function detailDistriClient($id)
     {
         
-        $user = Order::with('order_details', 'order_details.distribuitor')->where('orders.user_id', $id)
-                     ->orderby('orders.id','DESC')->paginate($paginate);
+        $order = Order::with('order_details', 'order_details.distribuitor', 'score')->where('orders.user_id', $id)
+                     ->orderby('orders.id','DESC')->get();
         
-        return  response([ 'user' => $user, 'roles' => User::find($id)->getRoleNames()]);
+        return  response([ 'order' => $order, 'roles' => User::find($id)->getRoleNames()]);
     }
 
     /**
      * List Orders distribuitors and clients.
      *
-     * @param role_id $role_id
+     * @param role_id $role_id paginate $paginate
      * @return \Illuminate\Http\Response
      */
-    function listOrdersByRole($role_id)
+    function listOrdersByRole($role_id, $paginate)
     {
         return User::role($role_id)
                     ->join('orders', 'orders.user_id', 'users.id')
@@ -62,7 +60,7 @@ class AdminController extends Controller
                             'orders.total_order',
                             'status_orders.status',
                             )
-                    ->get();
+                    ->paginate($paginate);
     }
 
     /**

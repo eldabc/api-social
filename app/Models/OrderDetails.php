@@ -17,6 +17,11 @@ class OrderDetails extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
     public function distribuitor()
     {
         return $this->belongsTo(User::class, 'distr_id')->withDefault([

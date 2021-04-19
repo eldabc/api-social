@@ -18,4 +18,9 @@ class Plan extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetails::class);
+    }
+
 }

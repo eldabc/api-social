@@ -17,9 +17,9 @@ class Order extends Model
         'city', 'delivery_address', 'name', 'phone', 'email', 'total_order', 'status_id', 'user_id'
     ];
 
-    public function StatusOrder()
+    public function status_order()
     {
-        return $this->belongsTo(StatusOrder::class);
+        return $this->belongsTo(StatusOrder::class, 'status_id');
     }
 
     public function order_details()

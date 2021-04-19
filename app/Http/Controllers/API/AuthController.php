@@ -9,9 +9,10 @@ use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthResource;
-use App\Http\Requests\AuthEditRequest;
-use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\AuthEditRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ChangePasswordRequest;
 
 class AuthController extends Controller
 {
@@ -73,7 +74,12 @@ class AuthController extends Controller
     public function update(AuthEditRequest $request, $id)
     {
         $validated = $request->validated();
-        
+
+        if ($request->hasFile('img')) {
+                $chage_img = User::findOrFail($id);
+                Storage::delete($chage_img->img);
+                $validated['img'] = Storage::put('users', $request->file('img'));
+        }
         User::where('id', $id)->update($validated);
         
         return response([ 'success' => 'Usuario modificado con éxito']);

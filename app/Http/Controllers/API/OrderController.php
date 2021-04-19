@@ -17,24 +17,25 @@ use App\Http\Controllers\Controller;
 use ErrorException;
 use Illuminate\Support\Facades\Mail;
 
-class OrderController extends EpaycoService //Controller
+class OrderController extends Controller//EpaycoService //
 {
     
     private $pay_service;
     public function __construct()
     {
-        $this->pay_service = new EpaycoService(); 
+        // $this->pay_service = new EpaycoService(); 
 
     }
 
     /**
-     * Display a listing of the resource.
-     *
+     * Display a listing orders. (view my orders)
+     * @param user_id $id paginate $paginate
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id, $paginate)
     {
-        return Order::with('order_details')->orderBy('id', 'DESC')->get();
+        $details = OrderDetails::with('plan.product')->orderBy('id', 'DESC')->paginate($paginate);
+        return $details->load('order.status_order')->where('order.user_id',$user_id);
     }
 
     /**
@@ -95,11 +96,11 @@ class OrderController extends EpaycoService //Controller
     /**
      * Display the specified resource.
      *
-     * @param  users_id $id
+     * @param  order_id $id (view detail order)
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return Order::with('order_details')->where('user_id', $id)->orderBy('id', 'DESC')->get();
+        return Order::with('order_details', 'status_order','order_details.distribuitor', 'score')->where('id', $id)->get();
     }
 }
