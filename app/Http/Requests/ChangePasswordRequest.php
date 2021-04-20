@@ -25,7 +25,7 @@ class ChangePasswordRequest extends FormRequest
     {
         return [
             'password' => 'required|confirmed', 
-            'email' => 'exists:users'
+            'token' => 'required',
         ];
     }
 
@@ -37,7 +37,7 @@ class ChangePasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.exists' => 'El correo ingresado no existe.',
+            'token.required' => 'El token es obligatorio.',
             'password.required' => 'La contraseña es requerida.',
             'password.confirmed' => 'Las contraseñas deben ser iguales.',
         ];

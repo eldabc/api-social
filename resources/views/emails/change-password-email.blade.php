@@ -76,7 +76,7 @@
 															
 															<tr>
 																<td style="color:#272727; font-family: 'Roboto', sans-serif; font-size:30px; line-height:32px; text-align:center; padding-bottom:15px;">
-																	<div mc:edit="text_2">Cambio de contraseña {{ env('APP_NAME') }}!</div>
+																	<div mc:edit="text_2">¡Cambio de contraseña {{ env('APP_NAME') }}!</div>
 																</td>
 															</tr>
 															<tr>
@@ -88,9 +88,7 @@
 																<td class="text pb15" style="color:#666666; font-family:Open Sans, sans-serif; font-size:15px; line-height:28px; text-align:left; padding: 0px 30px 0px 30px;">
 																	<div mc:edit="text_3">
 																		<ul>
-																			<li><b>Nombre:</b> {{ $data->name }}</li>
-																			<li><b></b> </li>
-																			<li><b>Email:</b> {{ $data->email }}</li>
+																			<li><b>Email:</b> {{ $data['email'] }}</li>
 																		</ul>
 																	</div>
 																</td>
@@ -98,7 +96,7 @@
 															<tr>
 																<td style="color:#272727; font-family: 'Roboto', sans-serif; font-size:15px; line-height:32px; text-align:center; padding-bottom:40px;">
 																	<div mc:edit="text_2">
-																		<p>Sí ha sido usted el que inició esta acción pulse <a href="#">Aquí</a>. </p>
+																		<p>Para cambiar contraseña pulse <a href="{{ env('APP_URL') }}change-password/{{ $data['token'] }}" target="_blank">Aquí</a>. </p>
 																	</div>
 																</td>
 															</tr>

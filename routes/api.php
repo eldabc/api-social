@@ -56,7 +56,8 @@ use Illuminate\Support\Facades\Route;
         // Users
         Route::get('/users/{id}', 'Api\AuthController@show');
         Route::put('/users/{id}', 'Api\AuthController@update');
-        Route::put('/change-password', 'Api\AuthController@changePassword');
+        Route::put('/change-password/{token}', 'Api\AuthController@changePassword');
+        Route::put('/forgot-password', 'Api\AuthController@emailChangePassword');
         // Orders
         Route::get('/orders/{user_id}/{paginate}', 'Api\OrderController@index');
         Route::get('/orders/{id}', 'Api\OrderController@show');

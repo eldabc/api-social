@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\ResaleData;
 use App\Mail\CreatedUserMailable;
 use App\Mail\CreatedOrderMailable;
+use App\Mail\ChangePasswordMailable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -81,7 +82,7 @@ use Illuminate\Support\Facades\Mail;
   }
 
   /**
-   * Maij in create user.
+   * Mail in create user.
    *
    * @param order $order
    * @return array
@@ -98,4 +99,20 @@ use Illuminate\Support\Facades\Mail;
       ];
     
     Mail::to($user->email)->send(new CreatedUserMailable($user));
+  }
+
+  /**
+   * Mail Change Password.
+   *
+   * @param email $email, token $token
+   * @return array
+   */ 
+  function send_mail_change_pass($email, $token)
+  {
+      $data = [
+        'email' => $email, 
+        'token' => $token
+      ];
+    
+    Mail::to($email)->send(new ChangePasswordMailable($data));
   }
