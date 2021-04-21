@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
 class AuthRequest extends FormRequest
 {
     /**
@@ -30,7 +29,8 @@ class AuthRequest extends FormRequest
             'delivery_address' => 'nullable',
             'city' => 'nullable',
             'total_transactions' => 'nullable',
-            'password' => 'required'//|confirmed
+            'password' => 'required_if:provider,==,""',//|confirmed
+            'provider' => 'required_if:password,==,""'
         ];
     }
 
@@ -47,8 +47,8 @@ class AuthRequest extends FormRequest
             'email.required' => 'El correo es requerido.',
             'email.email' => 'El correo no es correcto.',
             'email.unique' => 'El correo, ya está siendo usado por otro usuario.',
-            'password.required' => 'La contraseña es requerida.',
-            // 'password.confirmed' => 'Las contraseñas deben ser iguales.',
+            'password.required_if' => 'La contraseña es requerida.',
+            'provider.required_if' => 'Registro con redes sociales, no ha enviado el proveedor.',
         ];
     }
 }

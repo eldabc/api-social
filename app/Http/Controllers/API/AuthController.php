@@ -39,20 +39,20 @@ class AuthController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validated();
-
-            $validated['password'] = bcrypt($request->password);
+            if(!empty($validated['provider']))
+                $validated['password'] = '';
+            else
+                $validated['password'] = bcrypt($request->password);
 
             $user = User::create($validated)->assignRole($request->role_id);
-
-            $accessToken = $user->createToken('authToken')->accessToken;
-            
             send_mail_user($user);
+
             DB::commit();
-            return response([ 'user' => $user, 'access_token' => $accessToken]);
+            return response([ 'user' => $user, 'access_token' => $user->createToken('authToken')->accessToken]);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500);
         }
     }
 

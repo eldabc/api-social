@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('city')->nullable();
             $table->bigInteger('total_transactions')->nullable();
             $table->string('password');
+            $table->string('provider')->default('email');
             $table->rememberToken();
             $table->timestamps();
         });

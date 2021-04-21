@@ -37,4 +37,11 @@ class OrderDetails extends Model
             'updated_at' => null,
         ]);
     }
+
+    // public function getTotalPurchases()
+    // {
+    //    return $this->order_details()->reduce(function ($price, $item) {
+    //        return $price + ($item->quantity * $item->price);
+    //    }, 0);
+    // }
 }

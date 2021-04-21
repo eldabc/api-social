@@ -30,6 +30,7 @@ class User extends Authenticatable
         'city',
         'total_transactions',
         'password',
+        'provider',
     ];
 
     /**
@@ -65,5 +66,10 @@ class User extends Authenticatable
     public function scores()
     {
         return $this->hasMany(Score::class);
+    }
+
+    public function total()
+    {
+        return $this->hasOne(Total::class);
     }
 }
