@@ -100,7 +100,7 @@ class ProductController extends Controller
 
         }catch (\Exception $exception){
             DB::rollBack();
-            return Response($exception->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response($exception->getMessage(), 500);
         }
         
     }
@@ -130,7 +130,7 @@ class ProductController extends Controller
             
 
         }catch (\Exception $exception){
-            return Response("Ha ocurrido un error.".$exception->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response("Ha ocurrido un error.".$exception->getMessage(), 500);
         }
     }
 
@@ -147,7 +147,7 @@ class ProductController extends Controller
             return response([ 'success' => "Producto Eliminado"]);
         }
         catch(Exception $e){
-            return Response($e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response($e->getMessage(), 500);
 
         }
     }
@@ -165,7 +165,7 @@ class ProductController extends Controller
             return response([ 'success' => "Producto Eliminado"]);
         }
         catch(Exception $e){
-            return Response($e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response($e->getMessage(), 500);
 
         }
         

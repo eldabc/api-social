@@ -31,6 +31,7 @@ class OrderRequest extends FormRequest
             'email' => 'required',
             'total_order' => 'required',
             'user_id' => 'required',
+            'distr_id' => 'nullable',
             'items' => 'required|json'
         ];
     }

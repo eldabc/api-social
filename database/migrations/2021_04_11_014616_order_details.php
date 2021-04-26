@@ -18,7 +18,6 @@ class OrderDetails extends Migration
             $table->bigInteger('price');
             $table->integer('quantity');
             $table->bigInteger('plan_id')->unsigned();
-            $table->integer('distr_id')->nullable();
             $table->bigInteger('order_id')->unsigned();
 
             $table->foreign('plan_id')->references('id')->on('plans');

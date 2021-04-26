@@ -39,6 +39,7 @@ class AuthController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validated();
+            // return $validated;
             if(!empty($validated['provider']))
                 $validated['password'] = '';
             else
@@ -102,18 +103,14 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-
         $user = User::where('email', $request->email)->first();
+        $user->load('roles');
 
         if (!Hash::check($request->password, $user->password)){
             return response(['message' => 'Invalid Credentials']);
         }
-        
-        $accessToken = $user->createToken('authToken')->accessToken;
-        
-        $user->load('roles');
 
-        return response(['user' => $user, 'access_token' => $accessToken]);
+        return response(['user' => $user, 'access_token' => $user->createToken('authToken')->accessToken]);
 
     }
 

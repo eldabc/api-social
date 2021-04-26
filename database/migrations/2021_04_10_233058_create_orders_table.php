@@ -21,8 +21,9 @@ class CreateOrdersTable extends Migration
             $table->string('phone')->default(12345678);
             $table->string('email')->default('venta-directas@repsex.com');
             $table->bigInteger('total_order');
-            $table->bigInteger('status_id')->unsigned()->default(2); // 2 = Pendiente
+            $table->bigInteger('status_id')->unsigned()->default(2); // 2 = Pendient
             $table->bigInteger('user_id')->unsigned()->default(4); // 4 = direct_sale
+            $table->integer('distr_id')->nullable();
             
             $table->foreign('status_id')->references('id')->on('status_orders');
             $table->foreign('user_id')->references('id')->on('users');

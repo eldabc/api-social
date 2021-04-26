@@ -9,7 +9,7 @@ class OrderDetails extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'price', 'quantity', 'plan_id', 'order_id', 'distr_id'
+        'price', 'quantity', 'plan_id', 'order_id'
     ];
 
     public function order()
@@ -20,22 +20,6 @@ class OrderDetails extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
-    }
-
-    public function distribuitor()
-    {
-        return $this->belongsTo(User::class, 'distr_id')->withDefault([
-            'id' => null,
-            'name' => null,
-            'phone' => null,
-            'email' => null,
-            'email_verified_at' => null,
-            'delivery_address' => null,
-            'city' => null,
-            'total_transactions' => null,
-            'created_at' => null,
-            'updated_at' => null,
-        ]);
     }
 
     // public function getTotalPurchases()

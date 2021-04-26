@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use ErrorException;
 use App\Models\Plan;
 use App\Models\Order;
+use App\Models\Total;
 use App\Models\Product;
 use App\Models\ResaleData;
 use App\Models\OrderDetails;
@@ -57,10 +58,10 @@ class OrderController extends EpaycoService //Controller//
                 
                 $order = Order::create($validated);
 
-                $items = [];
+                $items = []; $total_purchases = 0;
                 foreach(json_decode($request->items) as $key => $value){
 
-                    $res = stock($value);
+                    $res = stock($value, !empty($order['distr_id']));
                         if ($res['stock'] < 0){
                             DB::rollBack();
                             return Response('Sin Stock suficiente para la compra '.$res['product']->name .' disponible: '.$res['product']->stock, 500, ['Content-Type' => 'text/plain']);
@@ -71,14 +72,21 @@ class OrderController extends EpaycoService //Controller//
                             "price" => $value->price,
                             "quantity" => $value->quantity,
                             "plan_id" => $value->plan_id,
-                            "distr_id" => $res['distr_id'],
                             "order_id" => $order->id
                     ]);
 
                     array_push($items, $orderDetails);
                 }
-                    $order['order_details'] = $items;
+                    $user = Order::getTotalByUser($order['user_id']);                    
+                    if($user) $total_purchases = $user->total_purchases;   
 
+                    // Update or create total for the user who buys
+                    Order::updateOrCreateTotalByUser($order['user_id'], $total_to_update = 'total_purchases', $total_purchases, $order['total_order']);
+
+                    // Update or create total when the user who buys is client
+                    if (!empty($order['distr_id']) > 0) Order::totalDistr($order['distr_id'],$order['total_order']);
+            
+                $order['order_details'] = $items;
             send_mail_order($order);
             
             DB::commit();
@@ -86,7 +94,7 @@ class OrderController extends EpaycoService //Controller//
         
         } catch (\Exception $e) {
             DB::rollBack();
-            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500);
         }
     }
 
@@ -98,41 +106,42 @@ class OrderController extends EpaycoService //Controller//
      */
     public function storeDirectSale(DirectSaleRequest $request)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
                 $validated = $request->validated();
                 $validated['status_id'] = 1; //1 = Entregado
 
                 $order = Order::create($validated);
-
                 $items = [];
                 foreach(json_decode($request->items) as $key => $value){
 
-                    $res = stock($value);
+                    $res = stock($value,$order['distr_id']);
                         if ($res['stock'] < 0){
                             DB::rollBack();
                             return Response('Sin Stock suficiente para la compra '.$res['product']->name .' disponible: '.$res['product']->stock, 500, ['Content-Type' => 'text/plain']);
                         }
 
-                    updateStock($res['table'],$res['stock'], $res['plan']->product_id);
+                    updateStock($res['table'],$res['stock'],$res['plan']->product_id);
                     $orderDetails =  OrderDetails::create([
                             "price" => $value->price,
                             "quantity" => $value->quantity,
                             "plan_id" => $value->plan_id,
-                            "distr_id" => $res['distr_id'],
                             "order_id" => $order->id,
                     ]);
 
                     array_push($items, $orderDetails);
                 }
-                    $order['order_details'] = $items;
-            
+                
+                // Update or create total when the user who buys is client
+                Order::totalDistr($order['distr_id'],$order['total_order']);
+                $order['order_details'] = $items;
+     
             DB::commit();
             return response([ 'order' => $order, 'success' => "Venta Directa Registrada"]);
         
         } catch (\Exception $e) {
             DB::rollBack();
-            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+            return Response('Ha ocurrido un problema. '.$e->getMessage(), 500);
         }
     }
 

@@ -24,6 +24,7 @@ class AuthRequest extends FormRequest
     {
         return [
             'name' => 'required|max:55',
+            'img' => 'nullable',
             'phone' => 'numeric|nullable',
             'email' => 'email|required|unique:users',
             'delivery_address' => 'nullable',

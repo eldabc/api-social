@@ -27,6 +27,7 @@ class DirectSaleRequest extends FormRequest
             'city' => 'required',
             'name' => 'required|max:55',
             'total_order' => 'required',
+            'distr_id' => 'required',
             'items' => 'required|json'
         ];
     }

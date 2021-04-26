@@ -28,23 +28,20 @@ use Illuminate\Support\Facades\Mail;
    * @param value $value
    * @return array
    */
-  function stock($value)
+  function stock($value, $distr_id = '')
   {
     $plan = Plan::findOrFail($value->plan_id);
 
-      if(!empty($value->distr_id)){ //sale client 
-        $distr_id = $value->distr_id;
-
+      if(!empty($distr_id)){ //sale client 
         $product = ResaleData::findOrFail($plan->product_id);
         $table = 'resale_data';
 
     } else { //sale distribuitor
-        $distr_id = 0;
         $product = Product::findOrFail($plan->product_id);
         $table = 'products';
     }
 
-    return [ 'plan' => $plan,  'distr_id' =>  $distr_id, 'product' => $product, 'table' => $table, 'stock' => $product->stock - $value->quantity ];
+    return [ 'plan' => $plan, 'product' => $product, 'table' => $table, 'stock' => $product->stock - $value->quantity ];
   }
 
   /**
