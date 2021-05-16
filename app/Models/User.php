@@ -27,9 +27,7 @@ class User extends Authenticatable
         'img',
         'phone',
         'email',
-        'delivery_address',
-        'city',
-        'total_transactions',
+        'accept_terms',
         'password',
         'provider',
     ];
@@ -53,24 +51,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function orders()
+    public function products()
     {
-        return $this->hasMany(Order::class);
-    }
-
-
-    public function resaleData()
-    {
-        return $this->hasMany(ResaleData::class);
+        return $this->hasMany(Product::class);
     }
 
     public function scores()
     {
         return $this->hasMany(Score::class);
-    }
-
-    public function total()
-    {
-        return $this->hasOne(Total::class);
     }
 }

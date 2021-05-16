@@ -25,10 +25,11 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required|max:55',
-            'presentation' => 'required|integer',
-            'stock' => 'required|integer',
-            'img' => 'required|image',
-            'status' => 'required|integer',
+            'price' => 'required|integer',
+            'description' => 'string|max:55',
+            'phone' => 'required|integer',
+            'phone_ws' => 'required',
+            'user_id' => 'required|integer',
         ];
     }
 
@@ -42,12 +43,12 @@ class ProductRequest extends FormRequest
         return [
             'name.required' => 'El nombre de producto es requerido.',
             'name.max:55' => 'El nombre de producto debe tener un máximo de 55 caracteres.',
-            'presentation.required' => 'El tipo de presentation es requerida.',
-            'presentation.integer' => 'El tipo de presentation debe ser un entero.',
-            'stock.required' => 'El stock, es requerido.',
-            'stock.integer' => 'La stock debe ser un número.',
-            'img.image' => 'La imagen es requerida.',
-            'status.required' => 'La estado del producto es requerido.',
+            'price.required' => 'El precio es requerido.',
+            'price.integer' => 'El precio debe ser un entero.',
+            'description.string' => 'La descripción debe ser una cadena.',
+            'phone.required' => 'El teléfono es requerido.',
+            'phone_ws.required' => 'El teléfono de WhatsApp, es requerido.',
+            'user_id.required' => 'No se ha enviado id de user.',
         ];
     }
 }

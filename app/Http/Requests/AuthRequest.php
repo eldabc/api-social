@@ -25,11 +25,9 @@ class AuthRequest extends FormRequest
         return [
             'name' => 'required|max:55',
             'img' => 'nullable',
-            'phone' => 'numeric|nullable',
+            'phone' => 'numeric|required',
             'email' => 'email|required|unique:users',
-            'delivery_address' => 'nullable',
-            'city' => 'nullable',
-            'total_transactions' => 'nullable',
+            'accept_terms' => 'required',
             'password' => 'required_if:provider,==,""',//|confirmed
             'provider' => 'required_if:password,==,""'
         ];
@@ -48,6 +46,7 @@ class AuthRequest extends FormRequest
             'email.required' => 'El correo es requerido.',
             'email.email' => 'El correo no es correcto.',
             'email.unique' => 'El correo, ya está siendo usado por otro usuario.',
+            'accept_terms' => 'Debe aceptar términos.',
             'password.required_if' => 'La contraseña es requerida.',
             'provider.required_if' => 'Registro con redes sociales, no ha enviado el proveedor.',
         ];

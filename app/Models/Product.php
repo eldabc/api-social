@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -10,16 +10,17 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'presentation', 'stock', 'img', 'status'
+        'name', 'price', 'description', 'phone', 'phone_ws', 'user_id'
     ];
 
-    public function plans()
+    public function user()
     {
-        return $this->hasMany(Plan::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function resaleData()
+    public function assets()
     {
-        return $this->hasMany(ResaleData::class);
+        //esta será la relación a los assets
+        // return $this->hasMany(Asset::class); 
     }
 }

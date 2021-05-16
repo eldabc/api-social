@@ -85,16 +85,7 @@ use Illuminate\Support\Facades\Mail;
    * @return array
    */ 
   function send_mail_user($user)
-  {
-      $data = [
-        'name' => $user->name, 
-        'phone' => $user->phone, 
-        'email' => $user->email, 
-        'delivery_address' => $user->delivery_address, 
-        'total_user' => $user->total_user, 
-        'items' => $user['order_details'] 
-      ];
-    
+  { 
     Mail::to($user->email)->send(new CreatedUserMailable($user));
   }
 

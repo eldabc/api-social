@@ -22,7 +22,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::with('plans')->where('status', '!=', 4)->orderBy('id', 'DESC')->get();
+        return Product::orderBy('id', 'DESC')->get();
     }
 
     /**
@@ -34,16 +34,12 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $validated = $request->validated();
-        $validated['img'] = Storage::put('products', $request->file('img'));
+        //$validated['img'] = Storage::put('products', $request->file('img'));
         $product = Product::create($validated);
         
-        foreach(json_decode($request->plans) as $key => $value){
-                Plan::create([
-                    "price" => $value->price,
-                    "quantity" => $value->quantity,
-                    "product_id" => $product->id,
-                ]);
-        }
+        // foreach(json_decode($request->imgs) as $key => $value){
+
+        // }
 
         return response([ 'product' => $product, 'success' => "Producto Creado"]);
 
@@ -52,12 +48,12 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Api\Product  $product
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        return Product::where('id', $product->id)->with('plans')->first();
+        return Product::where('id', $id)->first();
     }
 
     /**
@@ -73,28 +69,28 @@ class ProductController extends Controller
             DB::beginTransaction();
             $validated = $request->validated();
 
-            if ($request->hasFile('img')) {
-                $chageImg = Product::findOrFail($id);
-                Storage::delete($chageImg->img);
-                $validated['img'] = Storage::put('products', $request->file('img'));
-            }
+            // if ($request->hasFile('img')) {
+            //     $chageImg = Product::findOrFail($id);
+            //     Storage::delete($chageImg->img);
+            //     $validated['img'] = Storage::put('products', $request->file('img'));
+            // }
 
             $product = Product::where('id', $id)->update($validated);
-            foreach(json_decode($request->plans) as $key => $value){
-                if(!empty($value->id))
-                {
-                    Plan::where('id', $value->id)->update([
-                        "price" => $value->price,
-                        "quantity" => $value->quantity
-                    ]);
-                }else{
-                    Plan::create([
-                        "price" => $value->price,
-                        "quantity" => $value->quantity,
-                        "product_id" => $id
-                    ]);
-                }
-            }
+            // foreach(json_decode($request->plans) as $key => $value){
+            //     if(!empty($value->id))
+            //     {
+            //         Plan::where('id', $value->id)->update([
+            //             "price" => $value->price,
+            //             "quantity" => $value->quantity
+            //         ]);
+            //     }else{
+            //         Plan::create([
+            //             "price" => $value->price,
+            //             "quantity" => $value->quantity,
+            //             "product_id" => $id
+            //         ]);
+            //     }
+            // }
             DB::commit();
             return response([ 'product' => $product, 'success' => "Producto Modificado"]);
 
@@ -103,53 +99,6 @@ class ProductController extends Controller
             return Response($exception->getMessage(), 500);
         }
         
-    }
-
-     /**
-     * Update or create resale data since user distribuitor.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updateResaleData(Request $request)
-    {
-        try{
-            $product = ResaleData::updateOrCreate([
-                'product_id' => $request->product_id,
-                'user_id' => $request->user_id
-                ],
-                [
-                'stock' =>  $request->stock,
-                'shipping_value' => $request->shipping_value,
-                'delivery_time' => $request->delivery_time,
-                'status' => $request->status,
-                'unitary_price' => $request->unitary_price,
-                ]);
-            
-            return response([ 'product' => $product, 'success' => "Producto Modificado"]);
-            
-
-        }catch (\Exception $exception){
-            return Response("Ha ocurrido un error.".$exception->getMessage(), 500);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Api\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function deleteProductResale($id)
-    {
-        try{
-            ResaleData::where('id', $id)->update(['status' => 4]);
-            return response([ 'success' => "Producto Eliminado"]);
-        }
-        catch(Exception $e){
-            return Response($e->getMessage(), 500);
-
-        }
     }
 
     /**
@@ -161,14 +110,11 @@ class ProductController extends Controller
     public function destroy($id)
     {
         try{
-            Product::where('id', $id)->update(['status' => 4]);
+            $product = Product::findOrFail($id)->delete();
             return response([ 'success' => "Producto Eliminado"]);
         }
         catch(Exception $e){
             return Response($e->getMessage(), 500);
-
-        }
-        
-        
+        }  
     }
 }

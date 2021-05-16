@@ -25,9 +25,11 @@ class ProductEditRequest extends FormRequest
     {
         return [
             'name' => 'required|max:55',
-            'presentation' => 'required|integer',
-            'stock' => 'required|integer',
-            'img' => 'nullable|image',
+            'price' => 'required|integer',
+            'description' => 'string|max:55',
+            'phone' => 'required|integer',
+            'phone_ws' => 'required',
+            'user_id' => 'required|integer',
         ];
     }
 

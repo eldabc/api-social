@@ -39,7 +39,6 @@ class AuthController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validated();
-            // return $validated;
             if(!empty($validated['provider']))
                 $validated['password'] = '';
             else
@@ -115,7 +114,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Change Password user
+     * Email change Password user
      *
      * @return
      */
@@ -150,7 +149,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Change Password user
+     * Verify token and change Password user
      *
      * @return
      */

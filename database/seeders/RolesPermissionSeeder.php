@@ -15,18 +15,8 @@ class RolesPermissionSeeder extends Seeder
      */
     public function run()
     {   
-        $admin = Role::create(['name' => 'Administrador']);
-        $client = Role::create(['name' => 'Cliente']);
-        $distri = Role::create(['name' => 'Distribuidor']);
-
-        // Permission::create(['name' => 'list-distri-client']);
-        Permission::create(['name' => 'detail-distri-client'])->syncRoles([$admin, $client]);
-        // $permission = Permission::create(['name' => 'Create']);
-        // $permission = Permission::create(['name' => 'Edit']);
-        // $permission = Permission::create(['name' => 'Read']);
-        // $permission = Permission::create(['name' => 'Delete']);
-
-        // $admin->syncPermissions(1,2);
-        
+        Role::create(['name' => 'Administrador']);
+        Role::create(['name' => 'Oficina']);
+        Role::create(['name' => 'Personal']);
     }
 }
