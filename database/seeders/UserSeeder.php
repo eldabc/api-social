@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
         'accept_terms' => true,
         'password'       => bcrypt('12345678'),
         'remember_token' => null,
-      ])->assignRole('Oficina virtual');
+      ])->assignRole('Oficina');
 
       $distribuitor = User::create([
         'name'  => 'Personal Publiguarne',
