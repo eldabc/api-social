@@ -31,10 +31,15 @@ use Illuminate\Support\Facades\Route;
         // Users
         Route::get('/users', 'Api\AuthController@index');
         Route::delete('/users/{id}', 'Api\AuthController@destroy');
+        
+        // Streams
+        Route::put('/streams/{id}', 'Api\StreamController@update');
+        Route::post('/streams', 'Api\StreamController@store');
+        Route::delete('/streams/{id}', 'Api\StreamController@destroy');
     });
 
     Route::group(['middleware' => ['role:Personal']], function () {
-        Route::put('/update-create-score',  'Api\ScoreController@updateCreateScore');
+        Route::put('/update-create-scores',  'Api\ScoreController@updateCreateScore');
     });
 
     Route::group(['middleware' => ['role:Administrador|Oficina|Personal']], function () {
@@ -48,6 +53,9 @@ use Illuminate\Support\Facades\Route;
         // Directory
         Route::get('/directory', 'Api\DirectoryController@index');
         Route::get('/directory/{id}', 'Api\DirectoryController@show');
+        // Streams
+        Route::get('/streams', 'Api\StreamController@index');
+        Route::get('/streams/{id}', 'Api\StreamController@show');
         
     });
     
@@ -58,3 +66,4 @@ use Illuminate\Support\Facades\Route;
     // Any user
     Route::post('/users', 'Api\AuthController@store');
     Route::post('/login', 'Api\AuthController@login');
+   
