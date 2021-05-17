@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
           'email'      => 'admin@publiguarne.com',
           'email_verified_at' => now(),
           'accept_terms' => true,
+          'localization' => 'Localization admin',
           'password'       => bcrypt('12345678'),
           'remember_token' => null,
       ])->syncRoles(['Administrador']);
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
         'email'      => 'oficina@publiguarne.com',
         'email_verified_at' => now(),
         'accept_terms' => true,
+        'localization' => 'Localization oficina',
         'password'       => bcrypt('12345678'),
         'remember_token' => null,
       ])->assignRole('Oficina');
@@ -42,6 +44,7 @@ class UserSeeder extends Seeder
         'email'      => 'personal@publiguarne.com',
         'email_verified_at' => now(),
         'accept_terms' => true,
+        'localization' => 'Localization personal',
         'password'       => bcrypt('12345678'),
         'remember_token' => null,
       ])->assignRole('Personal');

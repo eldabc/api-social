@@ -9,7 +9,7 @@ class Score extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'score', 'order_id', 'user_id'
+        'comment', 'score', 'user_id'
     ];
 
       /**

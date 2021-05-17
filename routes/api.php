@@ -13,29 +13,27 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-    Route::group(['middleware' => ['role:Administrador']], function () {
+    Route::group(['middleware' => ['role:Administrador|Oficina']], function () {
 
-        // Admin routes
-        Route::get('/list-distri-client/{paginate}', 'Api\AdminController@listDistriClient');
-        Route::get('/detail-distri-client/{id}', 'Api\AdminController@detailDistriClient');
-        Route::get('/change-status-product/{product_id}/{status_id}', 'Api\AdminController@changeStatusProduct');
         // Products
         Route::post('/products',     'Api\ProductController@store');
         Route::put('/products/{id}', 'Api\ProductController@update');
-        // User
-        Route::get('/users', 'Api\AuthController@index');
-        Route::delete('/users/{id}', 'Api\AuthController@destroy');
-
         Route::delete('/products/{id}', 'Api\ProductController@destroy');
 
+        // Directory
+        Route::post('/directory', 'Api\DirectoryController@store');  
+        Route::put('/directory/{id}', 'Api\DirectoryController@update');
+        Route::delete('/directory/{id}', 'Api\DirectoryController@destroy');
+    });
+    
+    Route::group(['middleware' => ['role:Administrador']], function () {
+
+        // Users
+        Route::get('/users', 'Api\AuthController@index');
+        Route::delete('/users/{id}', 'Api\AuthController@destroy');
     });
 
-    Route::group(['middleware' => ['role:Distribuidor']], function () {
-        Route::put('/update-resale-data', 'Api\ProductController@updateResaleData');
-        Route::put('/delete-product-resale/{id}', 'Api\ProductController@deleteProductResale');
-    });
-
-    Route::group(['middleware' => ['role:Cliente|Distribuidor']], function () {
+    Route::group(['middleware' => ['role:Personal']], function () {
         Route::put('/update-create-score',  'Api\ScoreController@updateCreateScore');
     });
 
@@ -47,6 +45,9 @@ use Illuminate\Support\Facades\Route;
         // Users
         Route::get('/users/{id}', 'Api\AuthController@show');
         Route::put('/users/{id}', 'Api\AuthController@update');
+        // Directory
+        Route::get('/directory', 'Api\DirectoryController@index');
+        Route::get('/directory/{id}', 'Api\DirectoryController@show');
         
     });
     

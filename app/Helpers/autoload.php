@@ -22,28 +22,6 @@ use Illuminate\Support\Facades\Mail;
       else return false;
   }
 
-   /**
-   * Discount stock by role.
-   *
-   * @param value $value
-   * @return array
-   */
-  function stock($value, $distr_id = '')
-  {
-    $plan = Plan::findOrFail($value->plan_id);
-
-      if(!empty($distr_id)){ //sale client 
-        $product = ResaleData::findOrFail($plan->product_id);
-        $table = 'resale_data';
-
-    } else { //sale distribuitor
-        $product = Product::findOrFail($plan->product_id);
-        $table = 'products';
-    }
-
-    return [ 'plan' => $plan, 'product' => $product, 'table' => $table, 'stock' => $product->stock - $value->quantity ];
-  }
-
   /**
    * Update stock in data base.
    *
@@ -55,27 +33,6 @@ use Illuminate\Support\Facades\Mail;
     DB::update(
       'update '.$table.' set stock = ? where id = ?', [$stock, $product_id]
     );
-  }
-
-  /**
-   * Mail in create order.
-   *
-   * @param order $order
-   * @return array
-   */ 
-  function send_mail_order($order)
-  {
-      $data = [
-        'name' => $order->name, 
-        'phone' => $order->phone, 
-        'email' => $order->email, 
-        'city' => $order->city, 
-        'delivery_address' => $order->delivery_address, 
-        'total_order' => $order->total_order, 
-        'items' => $order['order_details'] 
-      ];
-    
-    Mail::to($order->email)->send(new CreatedOrderMailable($data));
   }
 
   /**

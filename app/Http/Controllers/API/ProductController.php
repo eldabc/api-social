@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
-use App\Models\Plan;
 use App\Models\Product;
-use App\Models\ResaleData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;

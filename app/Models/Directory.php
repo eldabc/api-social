@@ -5,17 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Plan extends Model
+class Directory extends Model
 {
     use HasFactory;
+    protected $table = "directories";
 
     protected $fillable = [
-        'price', 'quantity', 'user_id'
+        'name', 'address', 'description', 'img', 'user_id'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Scores extends Migration
+class Directories extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class Scores extends Migration
      */
     public function up()
     {
-        Schema::create('scores', function (Blueprint $table) {
+        Schema::create('directories', function (Blueprint $table) {
             $table->id();
-            $table->string('comment');
-            $table->integer('score');
+            $table->string('name');
+            $table->string('address');
+            $table->string('description');
+            $table->string('img');
             $table->bigInteger('user_id')->unsigned();
 
             $table->foreign('user_id')->references('id')->on('users');

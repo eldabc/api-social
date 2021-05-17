@@ -28,6 +28,7 @@ class User extends Authenticatable
         'phone',
         'email',
         'accept_terms',
+        'localization',
         'password',
         'provider',
     ];
